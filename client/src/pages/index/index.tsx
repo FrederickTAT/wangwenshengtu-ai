@@ -5,6 +5,8 @@ import { Button, Text, View } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import { FC, useState } from 'react';
 import styles from './index.module.less';
+import BoxView from '@/components/box-view';
+import BoxButton from '@/components/box-button';
 
 const modeCycle = Object.keys(ModeText) as Mode[];
 
@@ -20,9 +22,9 @@ const Index: FC = () => {
   return (
     <View className={styles.index}>
       <View className={styles.header}>
-        <View>
+        <BoxView>
           <Text>玩家信息</Text>
-        </View>
+        </BoxView>
       </View>
       <View className={styles.title}>望文生图</View>
       <View className={styles.mode}>
@@ -30,21 +32,21 @@ const Index: FC = () => {
         <Text className={styles.modeText}>{ModeText[mode]}</Text>
         <Button onClick={() => setNextOrLastMode('next')}>{'>'}</Button>
       </View>
-      <View>
-        <Button
+      <View className={styles.actions}>
+        <BoxButton
           className={styles.start}
           onClick={() =>
             Taro.redirectTo({ url: `${pagePaths.ROUND}?mode=${mode}` })
           }
         >
           开始游戏
-        </Button>
-        <Button
+        </BoxButton>
+        <BoxButton
           className={styles.start}
           onClick={() => Taro.redirectTo({ url: pagePaths.CREATE_IMAGE })}
         >
           创建图片
-        </Button>
+        </BoxButton>
       </View>
     </View>
   );

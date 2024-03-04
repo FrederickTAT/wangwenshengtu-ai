@@ -61,7 +61,10 @@ const SelectionsRound = ({
           ))}
         </View>
         <Button onClick={() => onSubmit?.(selections.join(''))}>提交</Button>
-        <Button onClick={() => setSelections(defaultSelection)}>清除</Button>
+        <Button onClick={() => {
+          setSelections(defaultSelection);
+          setCurrentSelectIndex(0)
+        }}>清除</Button>
       </View>
       <View
         className={styles.characters}

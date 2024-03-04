@@ -9,7 +9,7 @@ export const ModeText: Record<Mode, string> = {
 
 export const ModeCharactersMap: Record<Mode, number> = {
   [Mode.Easy]: 0,
-  [Mode.Normal]: 2,
+  [Mode.Normal]: 4,
   [Mode.Hard]: 4,
   [Mode.HardCore]: 6,
 };

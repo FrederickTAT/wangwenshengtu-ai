@@ -4,6 +4,7 @@ export interface Idiom {
   explanation: string;
   pinyin: string;
   word: string;
+  level: number;
   abbreviation: string;
   imageId: string;
 }

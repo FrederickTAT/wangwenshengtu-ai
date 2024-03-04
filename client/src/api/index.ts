@@ -23,6 +23,7 @@ const makeCloudFunctionCall =
 
 interface GetIdiomReq {
   word?: string;
+  level?: number;
 }
 
 export const getIdiom = makeCloudFunctionCall<GetIdiomReq, Idiom>('get-idiom');

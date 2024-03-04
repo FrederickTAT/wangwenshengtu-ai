@@ -1,6 +1,8 @@
 import { IdiomRound } from '@/types';
 import { Button, View } from '@tarojs/components';
 import styles from './index.module.less';
+import { shuffle } from 'lodash-es';
+import { useMemo } from 'react';
 
 interface OptionsRoundProps {
   round: IdiomRound;
@@ -8,9 +10,10 @@ interface OptionsRoundProps {
 }
 
 const OptionsRound = ({ round, onSubmit }: OptionsRoundProps) => {
+  const mergedOptions = useMemo(()=>shuffle([round.word,...(round.options || [])]) ,[round])
   return (
     <View className={styles.options}>
-      {round.options?.map((option, index) => (
+      {mergedOptions?.map((option, index) => (
         <Button
           key={index}
           onClick={() => {

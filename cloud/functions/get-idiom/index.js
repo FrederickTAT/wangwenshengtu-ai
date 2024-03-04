@@ -6,9 +6,12 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV }) // 使用当前云环境
 const db = cloud.database();
 const _ = db.command;
 
-const getRandomIdiom = async () => {
-  const res =
-    await db.collection('idioms').aggregate().sample({ size: 1 }).end()
+const getRandomIdiom = async (level) => {
+  const res = await db.collection('idioms')
+    .aggregate()
+    .match({ level: level ? _.eq(level) : _.exists(false) })
+    .sample({ size: 1 })
+    .end()
   if (!res || typeof res === 'string') {
     throw 'invalid data'
   }
@@ -39,12 +42,12 @@ const getCertainIdiom = async (word) => {
 
 // 云函数入口函数
 exports.main = async (event, context) => {
-  const { word } = event;
+  const { word, level } = event;
   try {
     if (word) {
       return await getCertainIdiom(word)
     }
-    return await getRandomIdiom()
+    return await getRandomIdiom(level)
   } catch (e) {
     return { code: 500, msg: e }
   }

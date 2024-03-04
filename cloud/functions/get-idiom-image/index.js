@@ -10,6 +10,20 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV }) // 使用当前云环境
 
 const db = cloud.database();
 
+const getPrompt = ({
+  word,
+  explanation
+}) => {
+  return `
+    为成语【${word}】创作一幅图片，其解释为【${explanation}】，要求如下
+    1. 不要出现任何形式、语言的文字
+    2. 添加中国古代或现代风格的元素、画风、人物等内容
+    3. 能够使人通过画面联想到该成语
+    4. 图片在不偏离其解释的情况下，尽可能贴近字面意思
+    5. 不允许出现任何超出正常人可接受范围的图片
+  `
+}
+
 const getImageB64 = async (prompt) => {
   const res = await axios.post(gptImageUrl, {
     prompt,
@@ -38,7 +52,7 @@ const getImageB64 = async (prompt) => {
 // 云函数入口函数
 exports.main = async (event, context) => {
   try {
-    const { word } = event;
+    const { word, explanation } = event;
     const wordQuery = db.collection('idioms').where({ word })
 
     const res = await wordQuery.get();
@@ -48,15 +62,16 @@ exports.main = async (event, context) => {
 
     const wordData = res.data[0];
 
-    console.log(wordData)
-
     if (wordData.imageId) {
       await cloud.deleteFile({
         fileList: [wordData.imageId]
       })
     }
 
-    const prompt = `${event.word}, 描述: ${event.explanation}`;
+    const prompt = getPrompt({
+      word,
+      explanation
+    });
 
     const imgB64 = await getImageB64(prompt);
 
